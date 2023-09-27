@@ -1,40 +1,29 @@
 #include "BuzzerManager.h"
 #include <Arduino.h>
 
-BuzzerManager::BuzzerManager() {
-    buzzerActive = false;
-    buzzerStartTime = 0;
-    buzzerInterval = 60000; // 1 minute interval
-}
-
-void BuzzerManager::begin(int buzzerPin) {
-    this->buzzerPin = buzzerPin;
+BuzzerManager::BuzzerManager(int buzzerPin) : buzzerPin(buzzerPin), active(false), startTime(0) {
     pinMode(buzzerPin, OUTPUT);
     digitalWrite(buzzerPin, LOW);
 }
 
-void BuzzerManager::checkAndTriggerBuzzer(float weightInKg, float lowLevel) {
-    if (weightInKg <= lowLevel) {
-        if (!buzzerActive) {
-            buzzerStartTime = millis();
-            buzzerActive = true;
-            digitalWrite(buzzerPin, HIGH); // Turn on the buzzer
-        }
-    } else {
-        stopBuzzer();
-    }
+void BuzzerManager::begin() {
+    // Initialize any buzzer-related settings here, if needed
 }
 
-void BuzzerManager::stopBuzzer() {
-    if (buzzerActive && millis() - buzzerStartTime >= buzzerInterval) {
-        buzzerActive = false;
-        digitalWrite(buzzerPin, LOW); // Turn off the buzzer
-    }
+void BuzzerManager::start() {
+    active = true;
+    startTime = millis();
+    digitalWrite(buzzerPin, HIGH);
+}
+
+void BuzzerManager::stop() {
+    active = false;
+    digitalWrite(buzzerPin, LOW);
 }
 
 void BuzzerManager::update() {
-    stopBuzzer(); // Check and stop the buzzer periodically
+    if (active && millis() - startTime >= 1000) { // Turn off the buzzer after 1 second (adjust as needed)
+        stop();
+    }
 }
-
-
 

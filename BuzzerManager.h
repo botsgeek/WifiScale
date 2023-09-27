@@ -3,17 +3,16 @@
 
 class BuzzerManager {
 public:
-    BuzzerManager();
-    void begin(int buzzerPin);
-    void checkAndTriggerBuzzer(float weightInKg, float lowLevel);
-    void stopBuzzer();
-    void update();
+    BuzzerManager(int buzzerPin); // Constructor that takes the buzzer pin as an argument
+    void begin(); // Initialize the buzzer
+    void start(); // Start the buzzer
+    void stop(); // Stop the buzzer
+    void update(); // Check and handle the buzzer state
     
 private:
     int buzzerPin;
-    bool buzzerActive;
-    unsigned long buzzerStartTime;
-    unsigned long buzzerInterval;
+    bool active;
+    unsigned long startTime;
 };
 
 #endif
